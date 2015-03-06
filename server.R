@@ -18,7 +18,7 @@ last_package <- ""
 shinyServer(function(input, output) {
   downloads <- reactive({
       end_date <- Sys.Date() - 1
-      start_date <- end_date - input$num_days + 1
+      start_date <- end_date - input$num_weeks * 7 + 1
       
       ret <- cran_downloads(package = input$package,
                             from = start_date,
