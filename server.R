@@ -26,7 +26,7 @@ shinyServer(function(input, output) {
       if (is.null(ret$downloads)) {
           return(last)
       }
-      d <- ret$downloads %>% mutate(day = as.Date(day))
+      d <- ret$downloads[[1]] %>% mutate(day = as.Date(day))
       last <<- d
       last_package <<- input$package
       d
