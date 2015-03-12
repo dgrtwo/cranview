@@ -6,6 +6,7 @@
 #
 
 library(shiny)
+library(stringr)
 library(dplyr)
 library(ggplot2)
 library(lubridate)
@@ -20,31 +21,29 @@ shinyServer(function(input, output) {
       end_date <- Sys.Date() - 1
       start_date <- end_date - input$num_weeks * 7 + 1
       
-      ret <- cran_downloads(package = input$package,
+      packages <- str_split(input$package, ",")[[1]]
+      cran_downloads0 <- failwith(NULL, cran_downloads, quiet = TRUE)
+      ret <- cran_downloads0(package = packages,
                             from = start_date,
                             to = end_date)
-      if (is.null(ret$downloads)) {
+      if (is.null(ret)) {
           return(last)
       }
-      d <- ret$downloads[[1]] %>% mutate(day = as.Date(day))
-      last <<- d
+      last <<- ret
       last_package <<- input$package
-      d
+      ret
   })
     
   output$downloadsPlot <- renderPlot({
       d <- downloads()
       if (input$by_week) {
           d <- d %>%
-              mutate(date = floor_date(day, "week")) %>%
-              group_by(date) %>%
-              summarize(downloads = sum(downloads))
-      } else {
-          d <- d %>% rename(date = day)
+              mutate(date = floor_date(date, "week")) %>%
+              group_by(package, date) %>%
+              summarize(count = sum(count))
       }
 
-      ggplot(d, aes(date, downloads)) + geom_line() +
-          ggtitle(paste("Downloads for", last_package)) +
+      ggplot(d, aes(date, count, color = package)) + geom_line() +
           xlab("Date") +
           ylab("Number of downloads")
   })

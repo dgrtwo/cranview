@@ -15,7 +15,8 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
-      HTML("Enter an R package to see the # of downloads over time from the RStudio CRAN Mirror."),
+      HTML("Enter an R package to see the # of downloads over time from the RStudio CRAN Mirror.",
+           "You can enter multiple packages separated by commas (e.g. 'shiny,ggplot2') to compare them"),
       textInput("package", "Package:", "shiny"),
       # submitButton("View Downloads"),
       sliderInput("num_weeks",
