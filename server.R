@@ -11,6 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(cranlogs)
+library(zoo)
 
 # if package not found, keep the same one up
 last <- NULL
@@ -37,10 +38,7 @@ shinyServer(function(input, output) {
   output$downloadsPlot <- renderPlot({
       d <- downloads()
       if (input$by_week) {
-          d <- d %>%
-              mutate(date = floor_date(date, "week")) %>%
-              group_by(package, date) %>%
-              summarize(count = sum(count))
+          d$count=rollmean(d$count, 7, na.pad=TRUE)
       }
 
       ggplot(d, aes(date, count, color = package)) + geom_line() +
