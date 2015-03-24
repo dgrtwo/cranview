@@ -5,7 +5,10 @@
 # http://shiny.rstudio.com
 #
 
-library(shiny)
+# get the list of all packages on CRAN
+library(httr)
+library(jsonlite)
+package_names = names(httr::content(httr::GET("http://crandb.r-pkg.org/-/desc")))
 
 shinyUI(fluidPage(
 
@@ -16,8 +19,12 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       HTML("Enter an R package to see the # of downloads over time from the RStudio CRAN Mirror.",
-           "You can enter multiple packages separated by commas (e.g. 'shiny,ggplot2') to compare them"),
-      textInput("package", "Package:", "shiny"),
+           "You can enter multiple packages to compare them"),
+      selectInput("package", 
+                  label = "Packages:",
+                  selected = sample(package_names, 2), # initialize the graph with a random package
+                  choices = package_names,
+                  multiple = TRUE),      
       # submitButton("View Downloads"),
       sliderInput("num_weeks",
                   "Number of weeks:",
