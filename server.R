@@ -12,6 +12,7 @@ library(ggplot2)
 library(lubridate)
 library(cranlogs)
 library(zoo)
+library(scales)
 
 shinyServer(function(input, output) {
   downloads <- reactive({
@@ -27,13 +28,15 @@ shinyServer(function(input, output) {
     
   output$downloadsPlot <- renderPlot({
       d <- downloads()
-      if (input$by_week) {
+      if (input$transformation=="weekly") {
           d$count=rollmean(d$count, 7, na.pad=TRUE)
+      } else if (input$transformation=="cumulative") {
+          d$count=cumsum(d$count)
       }
 
       ggplot(d, aes(date, count, color = package)) + geom_line() +
           xlab("Date") +
-          ylab("Number of downloads")
+          scale_y_continuous(name="Number of downloads", labels = comma)
   })
 
 })
