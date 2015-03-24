@@ -26,12 +26,6 @@ shinyUI(fluidPage(
                   selected = sample(package_names, 2), # initialize the graph with a random package
                   choices = package_names,
                   multiple = TRUE),      
-      # submitButton("View Downloads"),
-      sliderInput("num_weeks",
-                  "Number of weeks:",
-                  min = 1,
-                  max = 52,
-                  value = 12),
       radioButtons("transformation", 
                  "Data Transformation:",
                  c("Daily" = "daily", "Weekly" = "weekly", "Cumulative" = "cumulative")),
