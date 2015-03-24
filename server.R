@@ -14,26 +14,16 @@ library(cranlogs)
 library(zoo)
 library(scales)
 
-# if package not found, keep the same one up
-last <- NULL
-last_package <- ""
-
 shinyServer(function(input, output) {
   downloads <- reactive({
       end_date <- Sys.Date() - 1
       start_date <- end_date - input$num_weeks * 7 + 1
       
-      packages <- str_split(input$package, ",")[[1]]
+      packages <- input$package
       cran_downloads0 <- failwith(NULL, cran_downloads, quiet = TRUE)
-      ret <- cran_downloads0(package = packages,
-                            from = start_date,
-                            to = end_date)
-      if (is.null(ret)) {
-          return(last)
-      }
-      last <<- ret
-      last_package <<- input$package
-      ret
+      cran_downloads0(package = packages,
+                      from = start_date,
+                    to = end_date)
   })
     
   output$downloadsPlot <- renderPlot({
