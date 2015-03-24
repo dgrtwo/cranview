@@ -1,14 +1,8 @@
-
-# This is the user-interface definition of a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
 library(shiny)
-# get the list of all packages on CRAN
 library(httr)
 library(jsonlite)
+
+# get the list of all packages on CRAN
 package_names = names(httr::content(httr::GET("http://crandb.r-pkg.org/-/desc")))
 
 shinyUI(fluidPage(
