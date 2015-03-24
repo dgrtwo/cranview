@@ -14,16 +14,30 @@ library(cranlogs)
 library(zoo)
 library(scales)
 
+get_initial_release_date = function(packages)
+{
+    min_date = Sys.Date() - 1
+    
+    for (pkg in packages)
+    {
+        # api data for package. we want the initial release - the first element of the "timeline"
+        pkg_data = httr::GET(paste0("http://crandb.r-pkg.org/", pkg, "/all"))
+        pkg_data = httr::content(pkg_data)
+        
+        initial_release = pkg_data$timeline[[1]]
+        min_date = min(min_date, as.Date(initial_release))    
+    }
+    
+    min_date
+}
+
 shinyServer(function(input, output) {
   downloads <- reactive({
-      end_date <- Sys.Date() - 1
-      start_date <- end_date - input$num_weeks * 7 + 1
-      
       packages <- input$package
       cran_downloads0 <- failwith(NULL, cran_downloads, quiet = TRUE)
-      cran_downloads0(package = packages,
-                      from = start_date,
-                    to = end_date)
+      cran_downloads0(package = packages, 
+                      from    = get_initial_release_date(packages), 
+                      to      = Sys.Date()-1)
   })
     
   output$downloadsPlot <- renderPlot({
