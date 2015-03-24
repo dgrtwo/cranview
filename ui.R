@@ -5,6 +5,7 @@
 # http://shiny.rstudio.com
 #
 
+library(shiny)
 # get the list of all packages on CRAN
 library(httr)
 library(jsonlite)
