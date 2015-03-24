@@ -1,10 +1,3 @@
-
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
 library(shiny)
 library(stringr)
 library(dplyr)
@@ -45,7 +38,9 @@ shinyServer(function(input, output) {
       if (input$transformation=="weekly") {
           d$count=rollmean(d$count, 7, na.pad=TRUE)
       } else if (input$transformation=="cumulative") {
-          d$count=cumsum(d$count)
+          d = d %>%
+                group_by(package) %>%
+                transmute(count=cumsum(count), date=date) 
       }
 
       ggplot(d, aes(date, count, color = package)) + geom_line() +
