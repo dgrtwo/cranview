@@ -36,7 +36,7 @@ shinyServer(function(input, output) {
   output$downloadsPlot <- renderPlot({
       d <- downloads()
       if (input$transformation=="weekly") {
-          d$count=rollmean(d$count, 7, na.pad=TRUE)
+          d$count=rollapply(d$count, 7, sum, fill=NA)
       } else if (input$transformation=="cumulative") {
           d = d %>%
                 group_by(package) %>%
