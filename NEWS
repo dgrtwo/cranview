@@ -1,0 +1,14 @@
+        ***************************************************
+        *                                                 *
+        *  Changes and Developments in the CRAN view app  *
+        *                                                 *
+        ***************************************************
+
+------------------------------------
+- Changes in CRANview (2017-08-17) -
+------------------------------------
+
+    o Package 'plotly' is now used for the plot to make app more
+      interactive.
+    o Date range was added.
+    o Some information about selected packages is now provided.

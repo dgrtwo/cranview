@@ -1,6 +1,7 @@
 library(shiny)
 library(httr)
 library(jsonlite)
+library(plotly)
 
 # get the list of all packages on CRAN
 package_names = names(httr::content(httr::GET("http://crandb.r-pkg.org/-/desc")))
@@ -8,21 +9,28 @@ package_names = names(httr::content(httr::GET("http://crandb.r-pkg.org/-/desc"))
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Package Downloads Over Time"),
+  titlePanel("Package CRAN downloads over time"),
 
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
       HTML("Enter an R package to see the # of downloads over time from the RStudio CRAN Mirror.",
            "You can enter multiple packages to compare them"),
+      br(),
+      br(),
       selectInput("package", 
                   label = "Packages:",
                   selected = sample(package_names, 2), # initialize the graph with a random package
                   choices = package_names,
-                  multiple = TRUE),      
+                  multiple = TRUE),
       radioButtons("transformation", 
                  "Data Transformation:",
                  c("Daily" = "daily", "Weekly" = "weekly", "Cumulative" = "cumulative")),
+      
+      dateRangeInput("dateRange",
+                     label = 'Date range: yyyy-mm-dd',
+                     start = Sys.Date() - 2, end = Sys.Date() - 1, max = Sys.Date()),
+      
       HTML("Created using the <a href='https://github.com/metacran/cranlogs'>cranlogs</a> package.",
            "This app is not affiliated with RStudio or CRAN.",
            "You can find the code for the app <a href='https://github.com/dgrtwo/cranview'>here</a>,",
@@ -31,7 +39,8 @@ shinyUI(fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("downloadsPlot")
+      plotlyOutput("downloadsPlot"),
+      htmlOutput("packageinfo")
     )
   )
 ))
