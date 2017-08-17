@@ -33,8 +33,7 @@ shinyUI(fluidPage(
       
       HTML("Created using the <a href='https://github.com/metacran/cranlogs'>cranlogs</a> package.",
            "This app is not affiliated with RStudio or CRAN.",
-           "This is an updated version of original <a href='https://github.com/dgrtwo/cranview'>app</a>.",
-           "You can find the code for the app <a href='https://github.com/drabinova/cranview'>here</a>,",
+           "You can find the code for the app <a href='https://github.com/dgrtwo/cranview'>here</a>,",
            "or read more about it <a href='http://varianceexplained.org/r/cran-view/'>here</a>.")
     ),
 
