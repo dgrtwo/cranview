@@ -57,7 +57,7 @@ shinyServer(function(input, output, session) {
 
     downloads <- reactive({
         packages <- input$package
-        cran_downloads0 <- failwith(NULL, cran_downloads, quiet = TRUE)
+        cran_downloads0 <- purrr::possibly(cran_downloads, otherwise = NULL, quiet = TRUE)
         cran_downloads0(package = packages, 
                         from    = input$dateRange[1], 
                         to      = input$dateRange[2])

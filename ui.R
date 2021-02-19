@@ -20,7 +20,7 @@ shinyUI(fluidPage(
       br(),
       selectInput("package", 
                   label = "Packages:",
-                  selected = sample(package_names, 2), # initialize the graph with a random package
+                  selected = c("difNLR", "ShinyItemAnalysis"), # initialize the graph with a random package
                   choices = package_names,
                   multiple = TRUE),
       radioButtons("transformation", 
